@@ -1,0 +1,41 @@
+ToDo for 3/10:
+
+-Intercept text messages as they come in and add them to the database
+-Fix how the place end time is later than the capture time
+-Don't drop multiple text messages at one spot- either make this a "place" or
+make a new symbol that indicates there are multiple text messages their, and allow
+user to view them all
+-Conversation page isn't getting populated when you click on a text message
+
+
+
+
+
+
+To do's for thurs
+(If you do something on the list, move the line down to the done section, 
+ and add any other to-dos to the list that we need -Justine)
+
+TODO:
+	-Create home screen that you can navigate to other screens from (Stephen)
+	-Create a script to populate text message data (Cole)
+	-Create a table view controller (or Android equivalent) that will be populated with
+	 info from the TextMessageDataBase class (Stephen/Cole)
+	-Other?
+
+DONE:
+	-Read text messages from inbox in database class (Justine)
+	-Create text message class that stores all the info about a given text (Justine)
+	-Finish setting up database class with a structure to store read in texts and 
+	 getters and setters to be accessed from the table views (Justine)
+	-Figure out how to read text messages from outbox (Dan)
+	-Incorporate outbox texts into database class (Justine)
+	-Access contact names (Dan)
+	
+	Justine's API key:    android:apiKey="0poG_C3LsqOHHfOa_AvSsqt5NWTayLhQecvM_0w" 
+	Cole's API key:       android:apiKey="08ls9_vFzne_-YyBAGjgt9h1apoBXdb6a-ZtlZw"
+	Dan's API key: 05aRy-zid85GwZMqbS3B9FmOePvk5JreH0jgOaA
+	
+	Known bugs:
+		-If a capture is stopped prematurely the texts still get added to the capture
+		-If application is moved after the capture starts, the capture ends

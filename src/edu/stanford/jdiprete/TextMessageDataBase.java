@@ -1,0 +1,277 @@
+package edu.stanford.jdiprete;
+
+import edu.stanford.jdiprete.SMSDate;
+
+import java.sql.Date;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import android.database.Cursor;
+import android.location.Location;
+import android.net.Uri;
+import android.util.Log;
+import edu.stanford.jdiprete.Snapshot;
+import android.provider.ContactsContract.PhoneLookup;
+import edu.stanford.jdiprete.TextMessage;
+
+public class TextMessageDataBase {
+	TextMessageDatabaseManager tm_dbm;
+	ArrayList<TextMessage> textmessage_array;
+	Snapshot snapshot;
+	
+	
+    public TextMessageDataBase(Snapshot s) 
+    {
+    	snapshot = s;
+    	textmessage_array = new ArrayList<TextMessage>();
+    	String inboxAddr = "content://sms/inbox";
+    	String outboxAddr = "content://sms/sent";
+    	readDatabase();
+    	//readSMSBox(s, inboxAddr, true);
+    	//readSMSBox(s, outboxAddr, false);
+    }
+    
+    
+	private void readDatabase()
+	{
+		tm_dbm = ((SnapshotApplication)snapshot.getApplication()).getTextMessageDatabaseManager();
+		ArrayList<ArrayList<Object> > db_rows = tm_dbm.getAllRowsAsArray();
+		for (ArrayList<Object> row: db_rows)
+		{
+			long id = (Long)row.get(0);
+			String phone_number = (String)row.get(1);
+			long date = (Long)row.get(2);
+			String body = (String)row.get(3);
+			String person = (String) row.get(4);
+			int incoming = (Integer)row.get(5);
+			
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+            String date_string = formatter.format(new Date(date)); 
+            boolean is_incoming = false;
+            if (incoming != 0) is_incoming = true;
+			TextMessage tm = new TextMessage(phone_number, body, date_string, id, person, is_incoming);
+			
+	
+			
+			textmessage_array.add(tm);
+		}
+	}
+    
+    
+    
+    //referenced: http://spanishcoders.com/people/pep/blog/2010/08/code-for-reading-inbox-sms-in-android/
+    
+    private void readSMSBox(Snapshot s, String boxAddr, Boolean boxFlag)
+    {
+    	Uri SMSURI = Uri.parse(boxAddr);
+    	String[] projection = new String[]{"_id", "address", "body", "date"};
+    	Cursor cursor = null;
+    	TextMessage tm = null;
+    	try {
+    	    cursor = s.getContentResolver().query(SMSURI
+    	            , projection
+    	            , null //selection
+    	            , null //selectionArgs
+    	            , null); //sortOrder
+    	 
+    	    if (cursor != null && cursor.moveToFirst()) {
+    	        do {
+    	            int    id    = cursor.getInt(cursor.getColumnIndex("_id"));
+    	            String address = cursor.getString(cursor.getColumnIndex("address"));
+    	            String body = cursor.getString(cursor.getColumnIndex("body"));
+    	            String date = cursor.getString(cursor.getColumnIndex("date"));
+    	            
+    	            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+    	            date = formatter.format(new Date(Long.parseLong(date))); 
+    	            
+    	            Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
+    	            String person = "Unlisted Contact";
+    	            Cursor cur = s.getContentResolver().query(personUri,  
+    	                    new String[] { PhoneLookup.DISPLAY_NAME },  
+    	                    null, null, null );  
+    	            if(cur.moveToFirst()) {  
+    	            	int nameIdx = cur.getColumnIndex(PhoneLookup.DISPLAY_NAME);   
+    	            	person = cur.getString(nameIdx);  
+    	            	cur.close();   
+    	            }  
+    	            tm = new TextMessage(address, body, date, id, person, boxFlag);
+    	            textmessage_array.add(tm);
+    	            // Debugging code
+    	            //Log.d("Message", "id: " + id + " person: " + person + "  address: " + address + "  body: " + body + "  date: " + date);
+    	        
+    	        } while (cursor.moveToNext());
+    	    }
+    	} finally {
+    	    if (cursor != null) {
+    	        cursor.close();
+    	    }
+    	}
+    }
+    
+    public int getTextMessageDataBaseSize() {
+    	return textmessage_array.size();
+    }
+    
+    public void addTextMessage(TextMessage tm)
+    {
+    	textmessage_array.add(tm);
+    	int incoming = 0;
+    	if (tm.isIncoming()) incoming = 1;
+    	tm_dbm.addRow(tm.getPhoneNumber(), tm.getLongDate(), tm.getBody(), tm.getPerson(), incoming);
+    }
+    
+    //Returns an array of all text messages
+    public ArrayList<TextMessage> getTextMessages()
+    {
+    	return textmessage_array;
+    }
+    
+    //Returns an array of all text messages for a given phone number
+    
+    public ArrayList<TextMessage> getTextMessagesForPhoneNumber(String phone_number)
+    {
+    	ArrayList<TextMessage> tm_array = new ArrayList<TextMessage>();
+    	for (TextMessage tm: textmessage_array)
+    	{
+    		if (tm.getPhoneNumber().equals(phone_number))
+    		{
+    			tm_array.add(tm);
+    		}
+    	}
+    	return tm_array;
+    }
+    
+    //Returns an array of all text messages for a given date
+    
+    public ArrayList<TextMessage> getTextMessagesForDate(SMSDate date)
+    {
+      	ArrayList<TextMessage> tm_array = new ArrayList<TextMessage>();
+    	for (TextMessage tm: textmessage_array)
+    	{
+    		if (tm.getDate().equals(date))
+    		{
+    			tm_array.add(tm);
+    		}
+    	}
+    	return tm_array;
+    }
+   
+    //returns an array for a given person
+    public ArrayList<TextMessage> getTextMessagesForPerson(String person)
+    {
+      	ArrayList<TextMessage> tm_array = new ArrayList<TextMessage>();
+    	for (TextMessage tm: textmessage_array)
+    	{
+    		if (tm.getPerson().equals(person))
+    		{
+    			tm_array.add(tm);
+    		}
+    	}
+    	return tm_array;
+    }
+
+    
+    private void setGPSforMessages(ArrayList<TextMessage> messages, CaptureObject capture_object)
+    {
+    	ArrayList<Location> loc_array = ((SnapshotApplication)snapshot.getApplication()).getGPSDatabase().getGPSArrayForCapture(capture_object);
+    	for (TextMessage tm: messages)
+    	{
+    		if (loc_array.size() > 0)
+    		{
+	    		long min = Math.abs(tm.getLongDate() - loc_array.get(0).getTime());
+	    		Location min_loc = loc_array.get(0);
+	    		for (int i = 1; i < loc_array.size(); i++)
+	    		{
+	    			if (Math.abs(tm.getLongDate() - loc_array.get(i).getTime()) < min)
+	    			{
+	    				min = Math.abs(tm.getLongDate() - loc_array.get(i).getTime());
+	    				min_loc = loc_array.get(i);
+	    			}
+	    		}
+	    		tm.setLocation(min_loc);
+    		}else
+    		{
+    			Location loc = new Location("dummyprovider");
+    			loc.setLatitude(0.0);
+    			loc.setLongitude(0.0);
+    			tm.setLocation(loc);
+    		}
+    	}
+    }
+    
+    
+    
+    public ArrayList<TextMessage> getTextMessagesForCapture(CaptureObject capture_object)
+    {
+		ArrayList<TextMessage> capture_array = new ArrayList<TextMessage>();
+		for (TextMessage tm: textmessage_array)
+		{
+			Date date = new Date(tm.getLongDate());
+			Date start = new Date(capture_object.getStartTime());
+			Date end = new Date(capture_object.getEndTime());
+			Log.d("TMDB", "TM body: " + tm.getBody());
+			if (date.after(start) && date.before(end))
+			{
+				capture_array.add(tm);
+			}
+		}
+		Collections.sort(capture_array, new Comparator<Object>(){
+ 
+            public int compare(Object o1, Object o2) {
+                TextMessage tm1 = (TextMessage) o1;
+                TextMessage tm2 = (TextMessage) o2;
+               return (new Time(tm1.getLongDate()).compareTo(new Time(tm2.getLongDate())));
+            }
+ 
+        });
+		setGPSforMessages(capture_array, capture_object);
+		return capture_array;
+    }
+    
+    public ArrayList<TextMessage> getTextMessagesForContact(CaptureObject capture_object, String contact)
+    {
+    	ArrayList<TextMessage> contact_array = new ArrayList<TextMessage>();
+    	for (TextMessage tm: textmessage_array)
+		{
+			Date date = new Date(tm.getLongDate());
+			Date start = new Date(capture_object.getStartTime());
+			Date end = new Date(capture_object.getEndTime());
+			if (date.after(start) && date.before(end))
+			{
+				if (tm.getPerson().toLowerCase().equals(contact))
+				{
+					contact_array.add(tm);
+				}
+			}
+		}
+    	return contact_array;
+    }
+    
+    public ArrayList<TextMessage> getTextMessagesForPlace(Place place, CaptureObject capture_object)
+    {
+    	ArrayList<TextMessage> capture_array = this.getTextMessagesForCapture(capture_object);
+    	ArrayList<TextMessage> place_array = new ArrayList<TextMessage>();
+    	for (TextMessage tm: capture_array)
+    	{
+    		Date date = new Date(tm.getLongDate());
+    		Date start = new Date(place.getStartTime());
+    		Date end = new Date(place.getEndTime());
+    		if ((date.after(start) && date.before(end)) || tm.getLocation().distanceTo(place.getLocation()) < 5)
+    		{
+    			place_array.add(tm);
+    		}
+    	}
+    	return place_array;
+    }
+
+    
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

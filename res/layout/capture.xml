@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/black" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:orientation="vertical">
+	<TextView android:layout_width="wrap_content" android:id="@+id/textView1"
+		android:text="New Capture" android:textStyle="bold"
+		android:layout_height="50dip" android:layout_gravity="center"></TextView>
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+		<TextView android:layout_width="wrap_content" android:id="@+id/textView2"
+			android:layout_height="wrap_content" android:text="Label:    "></TextView>
+		<EditText android:id="@+id/editText1" android:text=""
+			android:layout_width="fill_parent" android:layout_height="50dip"></EditText>
+	</LinearLayout>
+	<LinearLayout android:layout_width="fill_parent"
+		android:id="@+id/linearLayout2" android:layout_height="150dip">
+		<TextView android:layout_width="wrap_content" android:id="@+id/textView3"
+			android:layout_height="wrap_content" android:text="End Time: "
+			android:layout_gravity="center_vertical"></TextView>
+		<TimePicker android:layout_width="wrap_content" android:id="@+id/timePicker1"
+			android:layout_height="wrap_content" android:layout_gravity="center_vertical"></TimePicker>
+	</LinearLayout>
+	<LinearLayout android:layout_width="fill_parent"
+		android:id="@+id/linearLayout3" android:layout_height="150dip">
+		<TextView android:layout_width="wrap_content" android:id="@+id/textView4"
+			android:layout_height="wrap_content" android:text="End Date: "
+			android:layout_gravity="center_vertical"></TextView>
+		<DatePicker android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/datePicker1"
+			android:layout_gravity="center_vertical"></DatePicker>
+	</LinearLayout>
+	<Button android:layout_width="wrap_content" android:text="Start Capture"
+		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+		android:id="@+id/button1"></Button>
+
+</LinearLayout>

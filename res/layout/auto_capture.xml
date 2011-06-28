@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:background="@color/grey"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="vertical">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Name: "
+		android:textSize="16px" />
+	<EditText android:id="@+id/nameThisCapture"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:hint="(My Capture)" />
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Start capture on:"
+		android:textSize="16px" />
+	<Spinner android:id="@+id/start_spinner" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:prompt="@string/start_day_prompt" />
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/startButton"
+		android:text="Start Time: " />
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="End capture on:"
+		android:textSize="16px" />
+	<Spinner android:id="@+id/end_spinner" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:prompt="@string/end_day_prompt" />
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/endButton"
+		android:text="End Time: " />
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/saveButton"
+		android:text="Save Capture" />
+</LinearLayout>

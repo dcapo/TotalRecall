@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout android:id="@+id/relativeLayout1" 
+    				android:layout_width="fill_parent" 
+    				android:layout_height="fill_parent" 
+    				xmlns:android="http://schemas.android.com/apk/res/android"
+    				android:padding="10px"
+    				android:background="@drawable/background">
+ 	
+        <Button android:text="About" 
+        		android:textColor="@color/white"
+        		android:id="@+id/about_button" 
+
+        		android:layout_height="wrap_content" 
+        		android:layout_width="wrap_content" 
+        		android:background="@layout/custom_button"
+        		android:layout_alignParentBottom="true"
+        		android:layout_alignParentRight="true"></Button>
+        <Button android:text="Archive"
+        		android:textSize="18px"
+        		android:textColor="@color/white"
+        		android:background="@layout/custom_button"
+        		android:id="@+id/archive_button"
+        		android:layout_height="55dp"
+        		android:layout_width="280dp"
+        		android:layout_centerHorizontal="true"
+        		android:layout_marginBottom="15dp"
+        		android:layout_above="@+id/about_button"></Button>
+        <ToggleButton android:id="@+id/capture_button"
+        	android:layout_height="55dp" 
+        	android:layout_above="@+id/archive_button" 
+        	android:background="@layout/custom_button"
+        	android:text="End Capture" 
+        	android:textColor="@color/white"
+        	android:layout_width="280dp"
+        	android:textSize="18px"
+        	android:layout_centerHorizontal= "true"
+        	android:layout_marginBottom="10px"
+        	android:textOff="Capture"></ToggleButton>
+    </RelativeLayout>
+
+
+
+

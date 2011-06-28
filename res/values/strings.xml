@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, Snapshot!</string>
+    <string name="app_name">Snapshot</string>
+    <string name="start_day_prompt">Choose Day to Start Capture</string>
+    <string name="end_day_prompt">Choose Day to End Capture</string>
+    <string-array name="day_array">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array><string name="about_pitch">Total Recall is a passive map journal of special events a user chooses to catalog. With a few button clicks, the app tracks its user’s movements and SMS history, over designated capture periods. Text messages tell stories, and Total Recall is there to piece them all together, in a comprehensive, geographic fashion.</string>
+
+<string name="start_text">Whenever you feel the desire to capture a moment, all you need to do is open the app, click on the capture button, and fill out this quick set up page. Give a title to your capture, set the end time and date, and Total Recall does the rest!</string>
+<string name="explore_capture1">Once your capture has ended (either timed out or physically ended by tapping the same capture button you hit to start it), you will find it in the archive listed with all cataloged captures.</string>
+<string name="explore_capture2">Once you open a specific capture, you will see the map view of that capture. Here you can see your path traveled during your capture time. The pins dropped signify different incidents. The blue balloon indicates a place where you hung around for longer than 10 minutes.  The pin with the envelope indicates an SMS message. </string>
+<string name="explore_capture2.5">The pin with multiple envelopes indicates multiple SMS messages within one given area (where you left before the 10 minute location pin would have dropped). </string>
+<string name="explore_capture3">Tap on one of these pins and you are prompted with a dialog box. If you click a single message, you are alerted with the actual SMS message, if a multi—the amount of texts, and if a location—the time of arrival and departure.</string>
+<string name="explore_capture4">Tap on the button to get details on the specific event. You are also able to view SMS messages in a conversation format, and get a little context of a specific message by tapping on that message.</string>
+<string name="explore_capture5">You are able to view all of the SMS messages in chronological order by tapping on the “Time” tab. Click on a message and it will bring up the conversation you had with the specific person</string>
+<string name="now_go">Now get out there and start capturing!</string>
+</resources>
